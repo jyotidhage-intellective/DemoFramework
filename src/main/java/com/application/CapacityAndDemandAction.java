@@ -15,9 +15,15 @@ public class CapacityAndDemandAction extends BaseAction{
 
     private WebDriver driver= DriverFactory.getDriver();
 
-    //select menu from the home page blinxsolution home page
-
     public void fnSC001(ConfigTestRunner configTestRunner){
+        if(fnDateVerification(configTestRunner))
+            fnTakeScreenAshot(configTestRunner,"Pass","Date range in the capacity utilization graph panel is same as the filter date selected","DateRangeVerification_SC001");
+        else
+            configTestRunner.getChildTest().log(Status.FAIL, "Date range in the capacity utilization graph panel is not same as the filter date selected.");
+
+    }
+
+    public boolean fnDateVerification(ConfigTestRunner configTestRunner){
         //user select capacity & demandoption from the home page
         configTestRunner.getBlinkCommonMethod().fnSelectMenu(configTestRunner,"capacity","Capacity and Demand","CapacityAndDemand","OverviewDropDown");
         //user select the date from the date picket
@@ -42,54 +48,46 @@ public class CapacityAndDemandAction extends BaseAction{
 
             }
         }
-        if(isPresent)
-            try {
-                configTestRunner.getChildTest().log(Status.PASS, "Date range in the capacity utilization graph panel is same as the filter date selected." + configTestRunner.getChildTest().addScreenCaptureFromPath(configTestRunner.screenShotName("DateRange")));
-            }catch (Exception e){
-
-
-            }
-        else
-            configTestRunner.getChildTest().log(Status.FAIL, "Date range in the capacity utilization graph panel is not same as the filter date selected.");
+        return isPresent;
     }
 
     public void fnSC002(ConfigTestRunner configTestRunner){
-        fnSC001(configTestRunner);
+        fnDateVerification(configTestRunner);
         configTestRunner.setChildTest(configTestRunner.getParentTest().createNode("Capacity & Utilization card options & value verification after Selecting Overview option"));
         fnOverviewOptionGrapgSelection(configTestRunner,"Bar");
     }
     public void fnSC003(ConfigTestRunner configTestRunner) {
-        fnSC001(configTestRunner);
+        fnDateVerification(configTestRunner);
         configTestRunner.setChildTest(configTestRunner.getParentTest().createNode("Verify the Capacity Utilisation bar graph after selecting Appointment Type option"));
         fnSelectGraph(configTestRunner,"Appointment Type","Bar");
     }
     public void fnSC004(ConfigTestRunner configTestRunner) {
-        fnSC001(configTestRunner);
+        fnDateVerification(configTestRunner);
         configTestRunner.setChildTest(configTestRunner.getParentTest().createNode("Verify the Capacity Utilisation bar graph after selecting Clinician Type option"));
         fnSelectGraph(configTestRunner,"Clinician Type","Bar");
     }
     public void fnSC005(ConfigTestRunner configTestRunner){
-        fnSC001(configTestRunner);
+        fnDateVerification(configTestRunner);
         configTestRunner.setChildTest(configTestRunner.getParentTest().createNode("Capacity & Utilization card options & value verification after Selecting Overview option"));
         fnOverviewOptionGrapgSelection(configTestRunner,"Line");
     }
     public void fnSC006(ConfigTestRunner configTestRunner) {
-        fnSC001(configTestRunner);
+        fnDateVerification(configTestRunner);
         configTestRunner.setChildTest(configTestRunner.getParentTest().createNode("Verify the Capacity Utilisation Line graph after selecting Appointment Type option"));
         fnSelectGraph(configTestRunner,"Appointment Type","Line");
     }
     public void fnSC007(ConfigTestRunner configTestRunner) {
-        fnSC001(configTestRunner);
+        fnDateVerification(configTestRunner);
         configTestRunner.setChildTest(configTestRunner.getParentTest().createNode("Verify the Capacity Utilisation Line graph after selecting Clinician Type option"));
         fnSelectGraph(configTestRunner,"Clinician Type","Line");
     }
     public void fnSC008(ConfigTestRunner configTestRunner) {
-        fnSC001(configTestRunner);
+        fnDateVerification(configTestRunner);
         configTestRunner.setChildTest(configTestRunner.getParentTest().createNode("Verify the Capacity vs Demand card is available"));
         fnCapacityvsDemandCardGrapgSelection(configTestRunner,"Bar");
     }
     public void fnSC009(ConfigTestRunner configTestRunner) {
-        fnSC001(configTestRunner);
+        fnDateVerification(configTestRunner);
         configTestRunner.setChildTest(configTestRunner.getParentTest().createNode("Verify search functionality is working on Capacity Vs Demand Panel"));
         //click on capacity & Demand card
         configTestRunner.elementUtil.waitAndClick(getWebElement(formName, "CapacityVsDemandCard", configTestRunner), Constants.AJAX_TIMEOUT);
@@ -107,7 +105,8 @@ public class CapacityAndDemandAction extends BaseAction{
                         configTestRunner.getChildTest().log(Status.PASS, "User enter search data as "+configTestRunner.getBaseAction().getTestData().get("SearchData")+" in the table search field");
                         try {
                             if (configTestRunner.elementUtil.fnSearchResult(configTestRunner, configTestRunner.getBaseAction().getTestData().get("SearchData")).isDisplayed()) {
-                                configTestRunner.getChildTest().log(Status.PASS, configTestRunner.getBaseAction().getTestData().get("SearchData")+" search value is displayed in the Capacity vs Demand table");
+//                                configTestRunner.getChildTest().log(Status.PASS, configTestRunner.getBaseAction().getTestData().get("SearchData")+" search value is displayed in the Capacity vs Demand table");
+                                fnTakeScreenAshot(configTestRunner,"Pass",configTestRunner.getBaseAction().getTestData().get("SearchData")+" search value is displayed in the Capacity vs Demand table","AGTableSearchBox");
                             }
                         }catch (Exception e){
                             configTestRunner.getChildTest().log(Status.FAIL, "Enter search value is not displayed in the Capacity vs Demand table");
@@ -123,22 +122,22 @@ public class CapacityAndDemandAction extends BaseAction{
 
     }
     public void fnSC010(ConfigTestRunner configTestRunner) {
-        fnSC001(configTestRunner);
+        fnDateVerification(configTestRunner);
         configTestRunner.setChildTest(configTestRunner.getParentTest().createNode("Verify the Capacity vs Demand card is available for Line Graph"));
         fnCapacityvsDemandCardGrapgSelection(configTestRunner,"Line");
     }
     public void fnSC012(ConfigTestRunner configTestRunner) {
-        fnSC001(configTestRunner);
+        fnDateVerification(configTestRunner);
         configTestRunner.setChildTest(configTestRunner.getParentTest().createNode("Verify the Capacity vs Demand card is available for Line Graph"));
         fnCapacityvsDemandCardGrapgSelection(configTestRunner,"Area");
     }
     public void fnSC013(ConfigTestRunner configTestRunner) {
-        fnSC001(configTestRunner);
+        fnDateVerification(configTestRunner);
         configTestRunner.setChildTest(configTestRunner.getParentTest().createNode("Verify the Capacity vs Demand card is available"));
         fnPatientUtilisation(configTestRunner,"Bar");
     }
     public void fnSC014(ConfigTestRunner configTestRunner) {
-        fnSC001(configTestRunner);
+        fnDateVerification(configTestRunner);
         configTestRunner.setChildTest(configTestRunner.getParentTest().createNode("Verify Patient utilisation Large Gride Table"));
         configTestRunner.elementUtil.waitAndClick(getWebElement(formName, "PatientUtilizationCard", configTestRunner), Constants.AJAX_TIMEOUT);
         if (fnWaitForVisibility(getWebElement(formName, "CapacityandUtilizationPanel", configTestRunner), Constants.AJAX_TIMEOUT)) {
@@ -176,7 +175,7 @@ public class CapacityAndDemandAction extends BaseAction{
 
     }
     public void fnSC011(ConfigTestRunner configTestRunner) {
-        fnSC001(configTestRunner);
+        fnDateVerification(configTestRunner);
         configTestRunner.setChildTest(configTestRunner.getParentTest().createNode("Verify the Capacity vs Demand card is available for the table population"));
         configTestRunner.elementUtil.waitAndClick(getWebElement(formName, "CapacityVsDemandCard", configTestRunner), Constants.AJAX_TIMEOUT);
         if (fnWaitForVisibility(getWebElement(formName, "CapcityVsDemandPanel", configTestRunner), Constants.AJAX_TIMEOUT)) {
@@ -186,30 +185,36 @@ public class CapacityAndDemandAction extends BaseAction{
         if (fnWaitForVisibility(getWebElement(formName, "CapcityVsDemandGraph_tableIcon", configTestRunner), Constants.AJAX_TIMEOUT)) {
             configTestRunner.elementUtil.waitAndClick(getWebElement(formName, "CapcityVsDemandGraph_tableIcon", configTestRunner), Constants.AJAX_TIMEOUT);
             try {
-                configTestRunner.getChildTest().log(Status.PASS, "Clinician Type  Available  Booked  Seen  DNA ");
-                List<WebElement> ageGroup = getWebElements(configTestRunner, formName, "CapacityVsDemandGraphClinicianType");
-                for (int i = 1; i < ageGroup.size(); i++) {
+
+                configTestRunner.getChildTest().log(Status.PASS, "Clinician Type ** Available **  Booked ** Seen **  DNA **  %Booked  ** %Seen ** %DNA");
+                List<WebElement> clientType = getWebElements(configTestRunner, formName, "CapacityVsDemandGraphClinicianType");
+                for (int i = 1; i < clientType.size(); i++) {
                         String booked = configTestRunner.elementUtil.columnValueBooked("BOOKED", i + 1).getText();
+                        configTestRunner.elementUtil.columnValueBooked("BOOKED", i + 1).click();
                         String seen = configTestRunner.elementUtil.columnValue("SEEN", i + 1).getText();
                         String dna = configTestRunner.elementUtil.columnValue("DNA", i + 1).getText();
                         String available = configTestRunner.elementUtil.columnValue("AVAILABLE", i + 1).getText();
-                        configTestRunner.getChildTest().log(Status.PASS, ageGroup.get(i).getText() + "     " + booked + "     " + seen + "      " + dna + "     " + available);
+                        String BookedPercenrage = configTestRunner.elementUtil.columnValue("% Booked", i + 1).getText();
+                        String SeenPercenatge = configTestRunner.elementUtil.columnValue("% Seen", i + 1).getText();
+                        String dnaPercentage = configTestRunner.elementUtil.columnValue("% DNA", i + 1).getText();
+                        configTestRunner.getChildTest().log(Status.PASS, clientType.get(i).getText() + "**" + booked + "**" + seen + "**" + dna + "**" + available+"**"+BookedPercenrage+"**"+SeenPercenatge+"**"+dnaPercentage);
                 }
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            fnTakeScreenAshot(configTestRunner,"Pass","Capacity vs Demand Panel display the table with data","TableVerification");
         }
     }
 
     public void fnSC015(ConfigTestRunner configTestRunner) {
-        fnSC001(configTestRunner);
+        fnDateVerification(configTestRunner);
         configTestRunner.setChildTest(configTestRunner.getParentTest().createNode("Verify the Capacity vs Demand card is available"));
         fnPatientUtilisation(configTestRunner,"Line");
         fnTakeScreenAshot(configTestRunner,"Pass","Login to the NHS BI application is not successful","Login_Unsuccessful");
     }
     public void fnSC016(ConfigTestRunner configTestRunner) {
-        fnSC001(configTestRunner);
+        fnDateVerification(configTestRunner);
         configTestRunner.setChildTest(configTestRunner.getParentTest().createNode("Verify the Capacity vs Demand card is available"));
         fnPatientUtilisation(configTestRunner,"Area");
     }
@@ -233,40 +238,51 @@ public class CapacityAndDemandAction extends BaseAction{
     }
     public void fnOverviewOptionGrapgSelection(ConfigTestRunner configTestRunner, String graphType){
         //click on capacity & utilization card
-        configTestRunner.elementUtil.waitAndClick(getWebElement(formName,"CapacityandUtilizationCard",configTestRunner), Constants.AJAX_TIMEOUT);
-        if(fnWaitForVisibility(getWebElement(formName,"OverviewDropDown",configTestRunner),Constants.AJAX_TIMEOUT)) {
-            configTestRunner.getChildTest().log(Status.PASS, "Capacity and Utilization card is selected successfully");
-        }else
-            configTestRunner.getChildTest().log(Status.FAIL, "Capacity and Utilization card is not selected successfully");
-        //Select the overview option from the drop down
-        if(!getWebElement(formName,"OverviewDropDown",configTestRunner).getText().equalsIgnoreCase("Overview"))
-            configTestRunner.elementUtil.fnDropDownSelect(getWebElement(formName,"OverviewDropDown",configTestRunner),"Overview","capacityUtilisationDataTypeDropdown");
-        WebElement available=getWebElement(formName,"CapacityandUtilizationAvailable",configTestRunner);
-        WebElement booked=getWebElement(formName,"CapacityandUtilizationBooked",configTestRunner);
-        WebElement dna=getWebElement(formName,"CapacityandUtilizationDNA",configTestRunner);
-        WebElement seen=getWebElement(formName,"CapacityandUtilizationSeen",configTestRunner);
-        if(available.isDisplayed() && booked.isDisplayed() && dna.isDisplayed() && seen.isDisplayed()){
-            configTestRunner.getChildTest().log(Status.PASS, "Available,Booked,DNA,Seen options are present in the capacity & utilization card after selecting overview option from the dropdown.");
-        }else
-            configTestRunner.getChildTest().log(Status.FAIL, "Available,Booked,DNA,Seen is not present in the capacity & utilization card after selecting overview option from the dropdown.");
-        configTestRunner.getChildTest().log(Status.PASS, "Total no of Available Appointments present in the capacity & utilization card is: "+configTestRunner.elementUtil.fnParseNumber(available.getText()));
-        configTestRunner.getChildTest().log(Status.PASS, "Total no of Booked Appointments present in the capacity & utilization card is: "+configTestRunner.elementUtil.fnParseNumber(booked.getText()));
-        configTestRunner.getChildTest().log(Status.PASS, "Total no of DNA Appointments present in the capacity & utilization card is: "+configTestRunner.elementUtil.fnParseNumber(dna.getText()));
-        configTestRunner.getChildTest().log(Status.PASS, "Total no of Seen Appointments present in the capacity & utilization card is: "+configTestRunner.elementUtil.fnParseNumber(seen.getText()));
+        try {
+            configTestRunner.elementUtil.waitAndClick(getWebElement(formName, "CapacityandUtilizationCard", configTestRunner), Constants.AJAX_TIMEOUT);
+            if (fnWaitForVisibility(getWebElement(formName, "OverviewDropDown", configTestRunner), Constants.AJAX_TIMEOUT)) {
+                configTestRunner.getChildTest().log(Status.PASS, "Capacity and Utilization card is selected successfully");
+            } else
+                configTestRunner.getChildTest().log(Status.FAIL, "Capacity and Utilization card is not selected successfully");
+            //Select the overview option from the drop down
+            if (!getWebElement(formName, "OverviewDropDown", configTestRunner).getText().equalsIgnoreCase("Overview"))
+                configTestRunner.elementUtil.fnDropDownSelect(getWebElement(formName, "OverviewDropDown", configTestRunner), "Overview", "capacityUtilisationDataTypeDropdown");
+            WebElement available = getWebElement(formName, "CapacityandUtilizationAvailable", configTestRunner);
+            WebElement booked = getWebElement(formName, "CapacityandUtilizationBooked", configTestRunner);
+            WebElement dna = getWebElement(formName, "CapacityandUtilizationDNA", configTestRunner);
+            WebElement seen = getWebElement(formName, "CapacityandUtilizationSeen", configTestRunner);
+            if (available.isDisplayed() && booked.isDisplayed() && dna.isDisplayed() && seen.isDisplayed()) {
+                configTestRunner.getChildTest().log(Status.PASS, "Available,Booked,DNA,Seen options are present in the capacity & utilization card after selecting overview option from the dropdown.");
+            } else
+                configTestRunner.getChildTest().log(Status.FAIL, "Available,Booked,DNA,Seen is not present in the capacity & utilization card after selecting overview option from the dropdown.");
+            configTestRunner.getChildTest().log(Status.PASS, "Total no of Available Appointments present in the capacity & utilization card is: " + configTestRunner.elementUtil.fnParseNumber(available.getText()));
+            configTestRunner.getChildTest().log(Status.PASS, "Total no of Booked Appointments present in the capacity & utilization card is: " + configTestRunner.elementUtil.fnParseNumber(booked.getText()));
+            configTestRunner.getChildTest().log(Status.PASS, "Total no of DNA Appointments present in the capacity & utilization card is: " + configTestRunner.elementUtil.fnParseNumber(dna.getText()));
+            configTestRunner.getChildTest().log(Status.PASS, "Total no of Seen Appointments present in the capacity & utilization card is: " + configTestRunner.elementUtil.fnParseNumber(seen.getText()));
+            try {
+                if(!getWebElement(formName, "CapacityAndUtilizationTotalValue", configTestRunner).getText().contains("0")) {
+                    fnWaitForVisibility(getWebElement(formName, "CapacityandUtilizationGraph", configTestRunner), Constants.AJAX_TIMEOUT);
+                    configTestRunner.getChildTest().log(Status.PASS, "Capacity & Utilization pie chart graph is displayed in the appliction after selecting Overview option");
+                }else
+                    configTestRunner.getChildTest().log(Status.WARNING, "Capacity & Utilization pie chart graph is not displayed in the application after selecting Overview option");
+            }catch (Exception e){
+                configTestRunner.getChildTest().log(Status.FAIL, "Capacity & Utilization pie chart graph is not displayed in the application for the given date selection.");
+            }
+            try {
+                if (fnWaitForVisibility(getWebElement(formName, "CapacityAndUtilizationTotalValue", configTestRunner), Constants.AJAX_TIMEOUT) &&
+                        fnWaitForVisibility(getWebElement(formName, "CapacityAndUtilizationTotalAppointment", configTestRunner), Constants.AJAX_TIMEOUT)) {
+                    configTestRunner.getChildTest().log(Status.PASS, "Total no of appointments present on the graph are :" + getWebElement(formName, "CapacityAndUtilizationTotalValue", configTestRunner).getText());
+                } else
+                    configTestRunner.getChildTest().log(Status.PASS, "Total no of appointments are not present on the graph ");
+            }catch (Exception e){
+                configTestRunner.getChildTest().log(Status.PASS, "Total no of appointments are not present on the graph ");
+            }
+            //bar option from the Capacity Utilization bottom panel
+            configTestRunner.getBlinkCommonMethod().fnCUPanelGraphVerificaion(configTestRunner, formName, "Bar", "CapacityUtilizationgraph", "Overview", "CUBarGraph", "capacityUtilisationGraphDropdown");
 
-        if(fnWaitForVisibility(getWebElement(formName,"CapacityandUtilizationGraph",configTestRunner),Constants.AJAX_TIMEOUT)){
-            configTestRunner.getChildTest().log(Status.PASS,"Capacity & Utilization pie chart graph is displayed in the appliction after selecting Overview option");
+        }catch (Exception e){
+            configTestRunner.getChildTest().log(Status.FAIL, "Capacity & Utilization Card is not present in the application.");
         }
-        else
-            configTestRunner.getChildTest().log(Status.FAIL,"Capacity & Utilization pie chart graph is not displayed in the appliction after selecting Overview option");
-
-        if(fnWaitForVisibility(getWebElement(formName,"CapacityAndUtilizationTotalValue",configTestRunner),Constants.AJAX_TIMEOUT) &&
-                fnWaitForVisibility(getWebElement(formName,"CapacityAndUtilizationTotalAppointment",configTestRunner),Constants.AJAX_TIMEOUT)){
-            configTestRunner.getChildTest().log(Status.PASS,"Total no of appointments present on the graph are :"+getWebElement(formName,"CapacityAndUtilizationTotalValue",configTestRunner).getText());
-        }else
-            configTestRunner.getChildTest().log(Status.PASS,"Total no of appointments are not present on the graph ");
-        //bar option from the Capacity Utilization bottom panel
-        configTestRunner.getBlinkCommonMethod().fnCUPanelGraphVerificaion(configTestRunner,formName,"Bar","CapacityUtilizationgraph","Overview","CUBarGraph","capacityUtilisationGraphDropdown");
     }
     public void fnCapacityvsDemandCardGrapgSelection(ConfigTestRunner configTestRunner,String graphType){
         //click on capacity & Demand card
@@ -293,7 +309,8 @@ public class CapacityAndDemandAction extends BaseAction{
         if(getWebElements(configTestRunner,formName,"CapcityVsDemandPanel_Graph").size()>=1 &&
                 getWebElements(configTestRunner,formName,"CapcityVsDemandPanel_Time").size()>=1 &&
                 getWebElements(configTestRunner,formName,"CapcityVsDemandPanel_Appointments").size()>=1)
-            configTestRunner.getChildTest().log(Status.PASS, "Capacity vs Demand "+graphType+" graph is plotted for Time vs Appointments at bottom panel");
+//            configTestRunner.getChildTest().log(Status.PASS, "Capacity vs Demand "+graphType+" graph is plotted for Time vs Appointments at bottom panel"+configTestRunner.getChildTest().addScreenCaptureFromPath(configTestRunner.screenShotName("CapacityDemandGraph")));
+            fnTakeScreenAshot(configTestRunner,"Pass","Capacity vs Demand "+graphType+" graph is plotted for Time vs Appointments at bottom panel","CapacityDemandGraph");
         else
             configTestRunner.getChildTest().log(Status.FAIL, "Capacity vs Demand "+graphType+" graph is not plotted for Time vs Appointments at bottom panel");
     }

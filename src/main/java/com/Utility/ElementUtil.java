@@ -1,5 +1,6 @@
 package com.Utility;
 import com.application.ConfigTestRunner;
+import com.aventstack.extentreports.Status;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -226,7 +227,13 @@ public class ElementUtil {
 
     }
     public WebElement fnSelectDate(ConfigTestRunner configTestRunner,  String locator,String text){
-        return driver.findElement(By.xpath("(//div[@class='drp-calendar "+locator+"']//td[text()='"+text+"'])[1]"));
+        WebElement element=null;
+        try {
+            element= driver.findElement(By.xpath("(//div[@class='drp-calendar " + locator + "']//td[text()='" + text + "'])[1]"));
+        }catch (Exception e){
+            configTestRunner.getChildTest().log(Status.FAIL, "On the calender date is not displaying.");
+        }
+        return element;
     }
 
     public Date fnConvertToDate(String value){

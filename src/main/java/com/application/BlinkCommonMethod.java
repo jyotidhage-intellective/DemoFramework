@@ -34,58 +34,76 @@ public void fnSelectMenu(ConfigTestRunner configTestRunner, String menu, String 
 public String fnDateSelection(ConfigTestRunner configTestRunner, String formName,String startDate, String endDate){
     configTestRunner.setChildTest(configTestRunner.getParentTest().createNode("Filter Date Selection Verification"));
     String ProvidedDateRange=null;
-    //user click on the Date field
-    if(fnWaitForVisibility(getWebElement(formName,"dateFilter",configTestRunner),Constants.AJAX_TIMEOUT)){
-        configTestRunner.elementUtil.waitAndClick(getWebElement(formName,"dateFilter",configTestRunner),Constants.AJAX_TIMEOUT);
-        sleep(1000);
-        //select from date
-        fnselectMonthYearDate(configTestRunner,"left",startDate);
-        configTestRunner.getChildTest().log(Status.INFO, "User select start date as: "+startDate);
-        //select to date
-        fnselectMonthYearDate(configTestRunner,"right",endDate);
-        configTestRunner.getChildTest().log(Status.INFO, "User select end date as: "+endDate);
-        //click on apply button
-        sleep(500);
-        fnWaitForVisibility(getWebElement(formName,"DateAfterSelection",configTestRunner),Constants.AJAX_TIMEOUT);
-        String dateSelected=getWebElement(formName,"DateAfterSelection",configTestRunner).getText();
-        configTestRunner.elementUtil.executeExtJsClick(configTestRunner.driver,getWebElement(formName,"DateFilterApplyBtn",configTestRunner));
-        sleep(1000);
-        fnWaitForVisibility(getWebElement(formName,"dateFilter",configTestRunner),Constants.AJAX_TIMEOUT);
-        String dateRangeSelectedis=getWebElement(formName,"dateFilter",configTestRunner).getAttribute("value");
-        String SDate=configTestRunner.elementUtil.fnMonthValue(configTestRunner.elementUtil.fnDate(startDate))+"/"+configTestRunner.elementUtil.fnMonthNo(configTestRunner.elementUtil.fnMonth(startDate))+"/"+configTestRunner.elementUtil.fnYear(startDate);
-        String EDate=configTestRunner.elementUtil.fnMonthValue(configTestRunner.elementUtil.fnDate(endDate))+"/"+configTestRunner.elementUtil.fnMonthNo(configTestRunner.elementUtil.fnMonth(endDate))+"/"+configTestRunner.elementUtil.fnYear(endDate);
-        ProvidedDateRange = SDate+" - "+EDate;
-        if(dateRangeSelectedis.equals(ProvidedDateRange)){
-            configTestRunner.getChildTest().log(Status.PASS, "User is able to see the selected daterange in the Date Filter filed.");
-        }else
-            configTestRunner.getChildTest().log(Status.FAIL, "User is not able to see the selected daterange in the Date Filter filed.");
-        if(dateSelected.equalsIgnoreCase(ProvidedDateRange))
-            configTestRunner.getChildTest().log(Status.PASS, "User is able to see the selected daterange in the botton pane of the Date Filter panel.");
-        configTestRunner.getChildTest().log(Status.PASS, "Date range selected is: "+dateSelected);
+    try{
+        if(fnWaitForVisibility(getWebElement(formName,"dateFilter",configTestRunner),Constants.AJAX_TIMEOUT)) {
+            configTestRunner.elementUtil.waitAndClick(getWebElement(formName, "dateFilter", configTestRunner), Constants.AJAX_TIMEOUT);
+            //select from date
+            fnselectMonthYearDate(configTestRunner,"left",startDate);
+            configTestRunner.getChildTest().log(Status.INFO, "User select start date as: "+startDate);
+            //select to date
+            fnselectMonthYearDate(configTestRunner,"right",endDate);
+            configTestRunner.getChildTest().log(Status.INFO, "User select end date as: "+endDate);
+            fnWaitForVisibility(getWebElement(formName,"DateAfterSelection",configTestRunner),Constants.AJAX_TIMEOUT);
+            String dateSelected=getWebElement(formName,"DateAfterSelection",configTestRunner).getText();
+            //click on apply button
+            configTestRunner.elementUtil.executeExtJsClick(configTestRunner.driver,getWebElement(formName,"DateFilterApplyBtn",configTestRunner));
+            sleep(1000);
+            fnWaitForVisibility(getWebElement(formName,"dateFilter",configTestRunner),Constants.AJAX_TIMEOUT);
+            String dateRangeSelectedis=getWebElement(formName,"dateFilter",configTestRunner).getAttribute("value");
+            String SDate=configTestRunner.elementUtil.fnMonthValue(configTestRunner.elementUtil.fnDate(startDate))+"/"+configTestRunner.elementUtil.fnMonthNo(configTestRunner.elementUtil.fnMonth(startDate))+"/"+configTestRunner.elementUtil.fnYear(startDate);
+            String EDate=configTestRunner.elementUtil.fnMonthValue(configTestRunner.elementUtil.fnDate(endDate))+"/"+configTestRunner.elementUtil.fnMonthNo(configTestRunner.elementUtil.fnMonth(endDate))+"/"+configTestRunner.elementUtil.fnYear(endDate);
+            ProvidedDateRange = SDate+" - "+EDate;
+            if(dateRangeSelectedis.equals(ProvidedDateRange)){
+                configTestRunner.getChildTest().log(Status.PASS, "User is able to see the selected daterange in the Date Filter filed.");
+            }else
+                configTestRunner.getChildTest().log(Status.FAIL, "User is not able to see the selected daterange in the Date Filter filed.");
+            if(dateSelected.equalsIgnoreCase(ProvidedDateRange))
+                configTestRunner.getChildTest().log(Status.PASS, "User is able to see the selected daterange in the botton pane of the Date Filter panel.");
+            configTestRunner.getChildTest().log(Status.PASS, "Date range selected is: "+dateSelected);
+        }
+
+    }catch (Exception e){
+        configTestRunner.getChildTest().log(Status.FAIL, "To select date filter date field is not present in the application");
+        e.printStackTrace();
     }
     return ProvidedDateRange;
 }
 
-public void fnselectMonthYearDate(ConfigTestRunner configTestRunner,String locator,String startDate){
+public void sample(ConfigTestRunner configTestRunner, String formName,String startDate){
 
-    WebElement year = configTestRunner.driver.findElement(By.xpath("//div[@class='drp-calendar "+locator+"']//select[@class='yearselect']"));
-    sleep(400);
-    configTestRunner.elementUtil.fnSelectDropDownValue(year,configTestRunner.elementUtil.fnYear(startDate));
-    WebElement month = configTestRunner.driver.findElement(By.xpath("//div[@class='drp-calendar "+locator+"']//select[@class='monthselect']"));
-    sleep(400);
-    configTestRunner.elementUtil.fnSelectDropDownValue(month,configTestRunner.elementUtil.fnMonth(startDate));
-    sleep(400);
+}
+
+public void fnselectMonthYearDate(ConfigTestRunner configTestRunner,String locator,String startDate){
+    try {
+        WebElement year = configTestRunner.driver.findElement(By.xpath("//div[@class='drp-calendar " + locator + "']//select[@class='yearselect']"));
+        sleep(200);
+        configTestRunner.elementUtil.fnSelectDropDownValue(year, configTestRunner.elementUtil.fnYear(startDate));
+    }catch (Exception e){
+        configTestRunner.getChildTest().log(Status.FAIL, "On the calender Year drop down is not displaying.");
+    }
+    try {
+        WebElement month = configTestRunner.driver.findElement(By.xpath("//div[@class='drp-calendar " + locator + "']//select[@class='monthselect']"));
+        sleep(200);
+        configTestRunner.elementUtil.fnSelectDropDownValue(month, configTestRunner.elementUtil.fnMonth(startDate));
+    }catch (Exception e){
+        configTestRunner.getChildTest().log(Status.FAIL, "On the calender Month drop down is not displaying.");
+    }
+    sleep(200);
     configTestRunner.elementUtil.waitAndClick(configTestRunner.elementUtil.fnSelectDate(configTestRunner,locator,configTestRunner.elementUtil.fnDate(startDate)),Constants.AJAX_TIMEOUT);
 }
 
 public void fnCUPanelGraphVerificaion(ConfigTestRunner configTestRunner,String formName,String graphType,String xpathElmName, String dropdownType,String xpathGraph,String SelectGraphCardName){
     //graph type option from the Capacity Utilization bottom panel
-    if (!getWebElement(formName, xpathElmName, configTestRunner).getText().equalsIgnoreCase(graphType))
-        configTestRunner.elementUtil.fnDropDownSelect(getWebElement(formName, xpathElmName, configTestRunner), graphType,SelectGraphCardName);
-    if(fnWaitForVisibility(getWebElement(formName,xpathGraph,configTestRunner),Constants.AJAX_TIMEOUT))
-        configTestRunner.getChildTest().log(Status.PASS,"Capacity Utilization panel displayed the "+graphType+" graph after selecting the "+dropdownType+" option from the dropdown.");
-    else
-        configTestRunner.getChildTest().log(Status.FAIL,"Capacity Utilization panel is not display the "+graphType+" graph after selecting the "+dropdownType+" option from the dropdown.");
+    try {
+        if (!getWebElement(formName, xpathElmName, configTestRunner).getText().equalsIgnoreCase(graphType))
+            configTestRunner.elementUtil.fnDropDownSelect(getWebElement(formName, xpathElmName, configTestRunner), graphType, SelectGraphCardName);
+        if (fnWaitForVisibility(getWebElement(formName, xpathGraph, configTestRunner), Constants.AJAX_TIMEOUT))
+            configTestRunner.getChildTest().log(Status.PASS, "Capacity Utilization panel displayed the " + graphType + " graph after selecting the " + dropdownType + " option from the dropdown."+configTestRunner.getChildTest().addScreenCaptureFromPath(configTestRunner.screenShotName(SelectGraphCardName)));
+        else
+            configTestRunner.getChildTest().log(Status.FAIL, "Capacity Utilization panel is not display the " + graphType + " graph after selecting the " + dropdownType + " option from the dropdown.");
+    }catch (Exception e){
+        configTestRunner.getChildTest().log(Status.FAIL, "Capacity Utilization panel is not display the " + graphType + " graph after selecting the " + dropdownType + " option from the dropdown.");
+    }
 }
 public void fnSelectGrap(ConfigTestRunner configTestRunner,String graphType, String xpathCardGraph,String graphName){
     if (!getWebElement("CapacityAndDemand", xpathCardGraph, configTestRunner).getText().equalsIgnoreCase(graphType))

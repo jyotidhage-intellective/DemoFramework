@@ -27,11 +27,11 @@ This method is used to login into NHS BI application
                 getWebElement(formName,"password",  configTestRunner).sendKeys(password);
                 configTestRunner.getChildTest().log(Status.INFO, "User Name Enter is " + password);
                 getWebElement(formName,"loginBtn",  configTestRunner).click();
-                sleep(2000);
+                sleep(200);
                 try {
                     if (configTestRunner.elementUtil.fnWaitForVisibility(getDivWithText("Health Care Solutions"), Constants.AJAX_TIMEOUT)) {
-                        sleep(1000);
-                        configTestRunner.getChildTest().log(Status.PASS, "Login to the NHS BI application is successful" + configTestRunner.getChildTest().addScreenCaptureFromPath(configTestRunner.screenShotName("Login_Successfull")));
+                        sleep(100);
+                        configTestRunner.getChildTest().log(Status.PASS, "Login to the NHS BI application is successful" );
                     } else
                         configTestRunner.getChildTest().log(Status.FAIL, "Login to the NHS BI application is successful." + configTestRunner.getChildTest().addScreenCaptureFromPath(configTestRunner.screenShotName("Login_Successfully")));
                 } catch (Exception e) {

@@ -134,6 +134,14 @@ public class DriverClass {
         configTestRunner.run("SC010");
     }
     @Test
+    public void SanityTest011(){
+        ConfigTestRunner configTestRunner = new ConfigTestRunner(extent);
+        configTestRunner.setConfigTestRunner(configTestRunner);
+        setConfigTestRunnerLocal(configTestRunner);
+        configTestRunner.setDestFile(destFile);
+        configTestRunner.run("SC011");
+    }
+    @Test
     public void SanityTest012(){
         ConfigTestRunner configTestRunner = new ConfigTestRunner(extent);
         configTestRunner.setConfigTestRunner(configTestRunner);
@@ -149,14 +157,7 @@ public class DriverClass {
         configTestRunner.setDestFile(destFile);
         configTestRunner.run("SC013");
     }
-    @Test
-    public void SanityTest011(){
-        ConfigTestRunner configTestRunner = new ConfigTestRunner(extent);
-        configTestRunner.setConfigTestRunner(configTestRunner);
-        setConfigTestRunnerLocal(configTestRunner);
-        configTestRunner.setDestFile(destFile);
-        configTestRunner.run("SC011");
-    }
+
     @Test
     public void SanityTest014(){
         ConfigTestRunner configTestRunner = new ConfigTestRunner(extent);

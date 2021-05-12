@@ -1,6 +1,7 @@
 package com.application;
 
 import com.Utility.ElementUtil;
+import com.assertthat.selenium_shutterbug.core.Capture;
 import com.assertthat.selenium_shutterbug.core.Shutterbug;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
@@ -8,14 +9,14 @@ import com.aventstack.extentreports.Status;
 import com.config.Configuration;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import ru.yandex.qatools.ashot.AShot;
 import ru.yandex.qatools.ashot.Screenshot;
 import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
-import ru.yandex.qatools.ashot.shooting.ShootingStrategy;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -120,17 +121,65 @@ public class ConfigTestRunner {
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH-mm-ss");
         String fileName = screenShotName+"_"+dateFormat.format(new Date())+".png";
-        return  capture1(fileName);
+//        String fileName = screenShotName+"_"+dateFormat.format(new Date());
+//        return  capture1(fileName);
+        return takeFullPageScreenShot(fileName);
+//        return capture1(fileName);
     }
+
     public String capture1(String screenShotName)  {
+
+//        Shutterbug.shootPage(getDriver(), Capture.FULL_SCROLL,true).withName(screenShotName).save(getDestFile());
+//        String dest =getDestFile()+"\\"+screenShotName+".png";
+
         Screenshot screenshot = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(2000)).takeScreenshot(getDriver());
-//        Screenshot screenshot = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(ShootingStrategies.scaling(2f), 1000)).takeScreenshot(driver);
+////        Screenshot screenshot = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(ShootingStrategies.scaling(2f), 1000)).takeScreenshot(driver);
         String dest =getDestFile()+"\\"+screenShotName;
         try {
-            ImageIO.write(screenshot.getImage(), "png", new File(dest));
+            ImageIO.write(screenshot.getImage(), "PNG", new File(dest));
         }catch (Exception e){
 
         }
+        return dest;
+    }
+    public String takeFullPageScreenShot(String screenShotName)  {
+
+        JavascriptExecutor jsExec = (JavascriptExecutor)driver;
+
+        //Returns a Long, Representing the Height of the window’s content area.
+        Long windowHeight = (Long) jsExec.executeScript("return window.innerHeight;");
+
+        //Returns a Long, Representing the Height of the complete WebPage a.k.a. HTML document.
+        Long webpageHeight = (Long) jsExec.executeScript("return document.body.scrollHeight;");
+
+        //Marker to keep track of the current position of the scroll point
+        //Long currentWindowScroll = Long.valueOf(0);
+        //Using java's boxing feature to create a Long object from native long value.
+
+        Long currentWindowScroll = 0L;
+        String dest =getDestFile()+"\\"+screenShotName;
+
+        do{
+            //System.out.println(windowHeight + ", " + webpageHeight + ", " + currentWindowScroll);
+
+            jsExec.executeScript("window.scrollTo(0, " + currentWindowScroll + ");");
+
+            Actions act = new Actions(driver);
+            act.pause(5000).perform();
+            TakesScreenshot ts = (TakesScreenshot) driver;
+            File source = ts.getScreenshotAs(OutputType.FILE);
+            File destination = new File(dest);
+            try {
+                FileUtils.copyFile(source, destination);
+                byte[] bytes = new byte[(int) source.length()];
+                String base64 = new String(Base64.encodeBase64(bytes), "UTF-8");
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+            currentWindowScroll = currentWindowScroll + windowHeight;
+
+        }while(currentWindowScroll <= webpageHeight);
         return dest;
     }
 //    public String screenShotName(String screenShotName, WebElement element){
